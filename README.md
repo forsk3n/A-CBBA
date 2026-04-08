@@ -30,7 +30,7 @@ In this version of the algorithm, the following changes have been introduced:
 
 
 
-\*   `acbba\_core.py` – Implements \*\*A-CBBA\*\*, an extension of the original CBBA with:
+\*   `acbba_core.py` – Implements \*\*A-CBBA\*\*, an extension of the original CBBA with:
 
 &#x20;   - \*Adaptive consensus stopping\*: each agent monitors local bid‑table stability over a sliding window of `τ` rounds; the algorithm terminates as soon as all reachable agents converge, avoiding both premature stops (under packet loss) and wasteful rounds (under ideal channels).
 
@@ -40,15 +40,15 @@ In this version of the algorithm, the following changes have been introduced:
 
 
 
-\*   `run\_experiment.py` – Provides a \*\*validation framework\*\* that compares baseline CBBA against A‑CBBA under increasing packet loss (0% to 50%). It runs Monte‑Carlo simulations, computes three metrics (task completion rate, consensus rounds, conflict‑free rate), and generates:
+\*   `run_experiment.py` – Provides a \*\*validation framework\*\* that compares baseline CBBA against A‑CBBA under increasing packet loss (0% to 50%). It runs Monte‑Carlo simulations, computes three metrics (task completion rate, consensus rounds, conflict‑free rate), and generates:
 
-&#x20;   - `results/tcr\_vs\_ploss.png`
+&#x20;   - `results/tcr_vs_ploss.png`
 
-&#x20;   - `results/rounds\_vs\_ploss.png`
+&#x20;   - `results/rounds_vs_ploss.png`
 
-&#x20;   - `results/conflict\_vs\_ploss.png`
+&#x20;   - `results/conflict_vs_ploss.png`
 
-&#x20;   - `results/summary\_table.csv`
+&#x20;   - `results/summary_table.csv`
 
 
 
@@ -62,7 +62,7 @@ I thank the authors of the original algorithm for their work and for making the 
 
 The original source code is publicly available as stated in the Data Availability Statement of the article:  
 
-\*"All data supporting the findings of this study are contained within the article... the corresponding source code has been made publicly available at https://github.com/ycchao0406/TLC\_CBBA"\*  
+\*"All data supporting the findings of this study are contained within the article... the corresponding source code has been made publicly available at [https://github.com/ycchao0406/TLC_CBBA](https://github.com/ycchao0406/TLC_CBBA) "\*  
 
 
 
