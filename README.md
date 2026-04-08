@@ -10,7 +10,7 @@ This project contains modifications to the algorithm from the paper \*\*"A Two-L
 
 \## Link to the original article
 
-> Chao, Y.; et al. A Two-Level Clustered Consensus-Based Bundle Algorithm for Dynamic Heterogeneous Multi-UAV Multi-Task Allocation. \*Sensors\* \*\*2025\*\*, \*25\*, 6738. \[https://doi.org/10.3390/s25216738](https://doi.org/10.3390/s25216738)
+> Chao, Y.; et al. A Two-Level Clustered Consensus-Based Bundle Algorithm for Dynamic Heterogeneous Multi-UAV Multi-Task Allocation. \*Sensors\* \*\*2025\*\*, \*25\*, 6738. \[[https://doi.org/10.3390/s25216738](https://doi.org/10.3390/s25216738)](https://doi.org/10.3390/s25216738)
 
 
 
