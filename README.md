@@ -18,7 +18,7 @@ This project contains modifications to the algorithm from the paper \*\*"A Two-L
 
 The source code of the original TLC-CBBA algorithm is available in the following repository:
 
-\[https://github.com/ycchao0406/TLC\_CBBA](https://github.com/ycchao0406/TLC\_CBBA)
+\[[https://github.com/ycchao0406/TLC\_CBBA](https://github.com/ycchao0406/TLC\_CBBA)](https://github.com/ycchao0406/TLC_CBBA)
 
 
 
