@@ -36,7 +36,7 @@ In this version of the algorithm, the following changes have been introduced:
 
 &#x20;   - \*Weighted relay selection\*: when a direct link is lost, messages can be forwarded through a relay agent chosen by a score that combines the relay’s residual fuel (reliability proxy) and the quality of the channel toward the destination.
 
-&#x20;   - \*Per‑round packet‑loss simulation\*: each edge of the communication graph is independently dropped with probability `p\_loss` before building the effective routing topology.
+&#x20;   - \*Per‑round packet‑loss simulation\*: each edge of the communication graph is independently dropped with probability `p_loss` before building the effective routing topology.
 
 
 
