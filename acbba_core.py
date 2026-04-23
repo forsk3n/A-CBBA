@@ -122,16 +122,16 @@ class ACBBA(CBBA):
         сообщения от src_idx к dst_idx через relay_idx.
         Формула: score = α * R + (1-α) * Q, где
         R = надёжность ретранслятора,
-        Q = min( Q(src, relay) * Q(relay, dst) )
+        Q = min( Q(src, relay), Q(relay, dst) )
         Параметры:
             relay_idx : индекс потенциального ретранслятора
             dst_idx   : индекс конечного получателя
         Возвращает:
             числовую оценку (чем выше, тем лучше ретранслятор)
         """
-        R = self._reliability(relay_idx)                    #Качество канала от источника к ретранслятору
-        Q_ik = self._channel_quality(src_idx, relay_idx)    #Качество канала от ретранслятора к получателю
-        Q_kj = self._channel_quality(relay_idx, dst_idx)     #Комбинированное качество
+        R = self._reliability(relay_idx)                    # надёжность ретранслятора
+        Q_ik = self._channel_quality(src_idx, relay_idx)    # качество канала i → k (источник → ретранслятор)
+        Q_kj = self._channel_quality(relay_idx, dst_idx)    # качество канала k → j (ретранслятор → получатель)
         Q = min(Q_ik, Q_kj)
         return self.alpha_relay * R + (1.0 - self.alpha_relay) * Q
 
@@ -198,13 +198,14 @@ class ACBBA(CBBA):
         base_graph = graph if graph is not None else self.graph
         base_graph_np = np.array(base_graph)
 
-        iter_idx = 1
+        iter_idx = 0
         time_mat = [[0]*self.num_agents for _ in range(self.num_agents)]
         bid_history = []        # история снимков winner_bid_list для адаптивной остановки
         done_flag  = False
         max_iter   = 500
 
         while not done_flag:
+            iter_idx += 1
             if iter_idx > max_iter:
                 break
 
@@ -224,10 +225,8 @@ class ACBBA(CBBA):
             bid_history.append(snapshot)
 
             # 5. Проверяем стабильность на протяжении τ раундов
-            if self._check_stability(bid_history) and iter_idx > 1:
+            if self._check_stability(bid_history):
                 done_flag = True
-            else:
-                iter_idx += 1
 
         # Сохраняем число раундов консенсуса для метрик (полезно для экспериментов)
         self.consensus_rounds = iter_idx
