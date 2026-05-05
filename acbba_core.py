@@ -1,5 +1,4 @@
 """
-A-CBBA: Adaptive Consensus Stopping + Weighted Relay Selection
 Модификация CBBA для работы в условиях неидеальных каналов связи.
 
 задача
@@ -20,10 +19,7 @@ import numpy as np
 import math
 from Depencies.cbba_core import CBBA
 
-# ─────────────────────────────────────────────────────────────────
 #  Вспомогательная функция: применение бернуллиевских потерь пакетов
-# ─────────────────────────────────────────────────────────────────
-
 def apply_packet_loss(adj_matrix, p_loss, rng=None, symmetric=True):
     """
     Возвращает зашумлённую копию матрицы смежности: каждое ребро удаляется
@@ -51,9 +47,7 @@ def apply_packet_loss(adj_matrix, p_loss, rng=None, symmetric=True):
     adj = (adj & mask).astype(int)  # применяем маску
     return adj.tolist()
 
-# ─────────────────────────────────────────────────────────────────
 #  A-CBBA: подкласс CBBA с адаптивной остановкой
-# ─────────────────────────────────────────────────────────────────
 class ACBBA(CBBA):
     """
     Расширяет CBBA следующими возможностями:
@@ -83,7 +77,7 @@ class ACBBA(CBBA):
         self.arena = arena
         self._rng = np.random.default_rng(seed=42)   # воспроизводимость результата
 
-    # ── коэффициент надёжности (прокси: нормализованный уровень топлива) ────
+    # коэффициент надёжности
     def _reliability(self, agent_idx):
         """
         Вычисляет динамический коэффициент надёжности агента.
@@ -97,7 +91,7 @@ class ACBBA(CBBA):
         max_fuel = max((a.fuel for a in self.AgentList), default=1) or 1
         return float(fuel) / max_fuel
 
-    # ── качество канала между двумя агентами (на основе расстояния) ───────
+    # качество канала между двумя агентами
     def _channel_quality(self, src_idx, dst_idx):
         """
         Оценивает качество прямого канала связи между двумя агентами.
@@ -115,7 +109,7 @@ class ACBBA(CBBA):
         max_dist = self.arena * math.sqrt(2)  # диагональ квадратной арены
         return max(0.0, 1.0 - dist / max_dist)
 
-    # ── оценка ретранслятора ───────────────────────────────────────────────
+    # оценка ретранслятора
     def _relay_score(self, src_idx, relay_idx, dst_idx):
         """
         Вычисляет комбинированную оценку агента-ретранслятора для передачи
@@ -135,7 +129,7 @@ class ACBBA(CBBA):
         Q = min(Q_ik, Q_kj)
         return self.alpha_relay * R + (1.0 - self.alpha_relay) * Q
 
-    # ── построение эффективного графа на раунд с потерями и ретрансляцией ──
+    # построение эффективного графа на раунд с потерями и ретрансляцией
     def _effective_graph(self, base_graph):
         n = self.num_agents
         lossy = apply_packet_loss(base_graph, self.p_loss, self._rng, symmetric=False) #делаем асимметричные потери
@@ -161,7 +155,7 @@ class ACBBA(CBBA):
         np.fill_diagonal(effective, 0)
         return effective.tolist()
 
-    # ── адаптивная проверка сходимости ─────────────────────────────────
+    #адаптивная проверка сходимости
     def _check_stability(self, history):
         """
         Проверяет, стабильны ли таблицы winner_bid_list для всех агентов
@@ -181,7 +175,7 @@ class ACBBA(CBBA):
                     return False
         return True
 
-    # ── переопределение метода solve() ──────────────────────────────────────────
+    # переопределение метода solve()
     def solve(self, AgentList, TaskList, WorldInfoInput, max_depth,
               time_window_flag, graph=None):
         """
