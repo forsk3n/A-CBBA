@@ -48,10 +48,10 @@
 | `results/tcr_vs_ploss.png` | TCR с 95% доверительными интервалами |
 | `results/rounds_vs_ploss.png` | Количество раундов с 95% ДИ |
 | `results/cfr_vs_ploss.png` | CFR с 95% ДИ |
-| `results/combined_figure.png` | Совмещённый график (две панели) |
+| `results/combined_figure.png` | Совмещённый график (TCR/раунды консенсуса) |
 | `results/summary_table.csv` | Mean, median, std, IQR, CI95 для всех метрик |
 | `results/statistical_tests.csv` | t-тест, Уилкоксон, Cohen's d, Бонферрони |
 | `results/anova_results.txt` | Двухфакторный ANOVA |
 | `results/degradation.csv` | Spearman ρ, абсолютная и относительная деградация TCR |
-| `results/raw_runs.csv` | Все прогоны с time_ms (для воспроизводимости) |
+| `results/raw_runs.csv` | Все прогоны с time_ms |
 | `results/performance.txt` | Замеры времени и потребления ресурсов |
