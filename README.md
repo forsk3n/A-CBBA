@@ -1,70 +1,57 @@
-\# A-CBBA, ADAPTIVE CONSENSUS STOPPING CRITERION FOR CBBA IN UAV SWARMS WITH IMPERFECT COMMUNICATION
+# A-CBBA: адаптивный критерий останова консенсуса для CBBA в условиях ненадёжной связи
 
+## О проекте
 
+Репозиторий содержит модификацию алгоритма CBBA, а также скрипт проведения экспериментальный для статистической верификации предложенного алгоритма A-CBBA.
 
-\## About
+## Состав репозитория
 
-This project contains modifications to the algorithm from the paper \*\*"A Two-Level Clustered Consensus-Based Bundle Algorithm for Dynamic Heterogeneous Multi-UAV Multi-Task Allocation"\*\*. The original source code and research were published by the authors.
+### `acbba_core.py` — алгоритм A-CBBA
 
+Реализует расширение базового CBBA, включающее три механизма:
 
+- **Адаптивный критерий останова.** Каждый агент отслеживает стабильность локальной таблицы ставок на скользящем окне длиной `τ` раундов. Алгоритм завершается сразу после того, как все достижимые агенты фиксируют сходимость, не дожидаясь истечения фиксированного счётчика бездействия. Это исключает как преждевременный останов при потерях пакетов, так и раунды бездействия в условиях качественного канала связи.
+- **Взвешенный выбор ретранслятора.** При разрыве прямого канала сообщение перенаправляется через ретранслятор, выбранный по совместному критерию надёжности (остаток топлива) и качества сквозного пути к адресату через ретранслятор.
+- **Независимая симуляция потерь.** Каждое ребро графа связности независимо отбрасывается с вероятностью `p_loss` перед построением эффективной топологии маршрутизации.
 
-\## Link to the original article
+### `cbba_core.py` — базовый алгоритм CBBA
 
-> Chao, Y.; et al. A Two-Level Clustered Consensus-Based Bundle Algorithm for Dynamic Heterogeneous Multi-UAV Multi-Task Allocation. \*Sensors\* \*\*2025\*\*, \*25\*, 6738. \[[https://doi.org/10.3390/s25216738](https://doi.org/10.3390/s25216738)](https://doi.org/10.3390/s25216738)
+Оригинальная реализация CBBA в качестве контрольного алгоритма в экспериментах.
 
+### `run_experiment.py` — скрипт для проведения эксперимента
 
+Сравнивает CBBA и A-CBBA при уровнях потерь пакетов от 0% до 50% (шаг 10%). Для каждого условия проводится 50 независимых прогонов Монте-Карло (итого 600 прогонов на алгоритм).
 
-\## Link to the original code
+**Метрики качества:**
+- TCR (Task Completion Rate) — доля выполненных задач
+- Количество раундов консенсуса
+- CFR (Conflict-Free Rate) — доля бесконфликтных распределений
 
-The source code of the original TLC-CBBA algorithm is available in the following repository:
+**Статистический анализ:**
+- Среднее, медиана, стандартное отклонение, IQR и 95% доверительные интервалы
+- Парный t-критерий Стьюдента с поправкой Бонферрони
+- Критерий знаковых рангов Уилкоксона (непараметрический)
+- Коэффициент размера эффекта Cohen's d
+- Двухфакторный ANOVA с проверкой взаимодействия algorithm × p_loss
+- Коэффициент Спирмена ρ(TCR, p_loss) — мера деградации каждого алгоритма
 
-\[[https://github.com/ycchao0406/TLC\_CBBA](https://github.com/ycchao0406/TLC\_CBBA)](https://github.com/ycchao0406/TLC_CBBA)
+**Профилирование ресурсов:**
+- Время выполнения каждого прогона (мс) с детализацией по уровням p_loss
+- Коэффициент накладных расходов A-CBBA/CBBA по каждому уровню
+- Пиковое потребление памяти Python-процесса (tracemalloc)
+- Размер процесса в RAM (RSS, psutil)
 
+**Выходные файлы:**
 
-
-\## Modifications made
-
-
-
-In this version of the algorithm, the following changes have been introduced:
-
-
-
-\*   `acbba_core.py` – Implements \*\*A-CBBA\*\*, an extension of the original CBBA with:
-
-&#x20;   - \*Adaptive consensus stopping\*: each agent monitors local bid‑table stability over a sliding window of `τ` rounds; the algorithm terminates as soon as all reachable agents converge, avoiding both premature stops (under packet loss) and wasteful rounds (under ideal channels).
-
-&#x20;   - \*Weighted relay selection\*: when a direct link is lost, messages can be forwarded through a relay agent chosen by a score that combines the relay’s residual fuel (reliability proxy) and the quality of the channel toward the destination.
-
-&#x20;   - \*Per‑round packet‑loss simulation\*: each edge of the communication graph is independently dropped with probability `p_loss` before building the effective routing topology.
-
-
-
-\*   `run_experiment.py` – Provides a \*\*validation framework\*\* that compares baseline CBBA against A‑CBBA under increasing packet loss (0% to 50%). It runs Monte‑Carlo simulations, computes three metrics (task completion rate, consensus rounds, conflict‑free rate), and generates:
-
-&#x20;   - `results/tcr_vs_ploss.png`
-
-&#x20;   - `results/rounds_vs_ploss.png`
-
-&#x20;   - `results/conflict_vs_ploss.png`
-
-&#x20;   - `results/summary_table.csv`
-
-
-
-\## Acknowledgements
-
-I thank the authors of the original algorithm for their work and for making the source code publicly available.
-
-
-
-\## License
-
-The original source code is publicly available as stated in the Data Availability Statement of the article:  
-
-\*"All data supporting the findings of this study are contained within the article... the corresponding source code has been made publicly available at [https://github.com/ycchao0406/TLC_CBBA](https://github.com/ycchao0406/TLC_CBBA) "\*  
-
-
-
-No explicit open-source license (e.g., MIT, GPL) is provided for the original repository. This project is a fork of that code. Unless a license is added by the original authors, all rights remain with them. If you intend to use or redistribute this modified version, please consult the original authors for clarification.
-
+| Файл | Содержимое |
+|---|---|
+| `results/tcr_vs_ploss.png` | TCR с 95% доверительными интервалами |
+| `results/rounds_vs_ploss.png` | Количество раундов с 95% ДИ |
+| `results/cfr_vs_ploss.png` | CFR с 95% ДИ |
+| `results/combined_figure.png` | Совмещённый график (две панели) |
+| `results/summary_table.csv` | Mean, median, std, IQR, CI95 для всех метрик |
+| `results/statistical_tests.csv` | t-тест, Уилкоксон, Cohen's d, Бонферрони |
+| `results/anova_results.txt` | Двухфакторный ANOVA |
+| `results/degradation.csv` | Spearman ρ, абсолютная и относительная деградация TCR |
+| `results/raw_runs.csv` | Все прогоны с time_ms (для воспроизводимости) |
+| `results/performance.txt` | Замеры времени и потребления ресурсов |
