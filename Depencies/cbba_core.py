@@ -1,9 +1,8 @@
-# cbba_core.py — Оригинальная версия, очищенная только от действительно неиспользуемого кода
 import numpy as np
 import math
 import copy
 
-# --- Структуры данных ---
+# Структуры данных
 class Agent:
     def __init__(self, agent_id, agent_type, x, y, z=0, nom_velocity=10, availability=0, fuel=0):
         self.agent_id = agent_id
@@ -34,7 +33,7 @@ class WorldInfo:
         self.limit_y = limit_y
         self.limit_z = limit_z
 
-# --- Реализация алгоритма CBBA ---
+# Реализация алгоритма CBBA
 class CBBA(object):
     def __init__(self, agent_types, task_types, compatibility_mat):
         self.agent_types = agent_types
@@ -400,7 +399,6 @@ class CBBA(object):
     def get_bid_count_list(self):
         return [len(s) for s in self.bid_count_list]
 
-
 def dicts_to_agents(uavs, agent_types):
     type_map = {name: idx for idx, name in enumerate(agent_types)}
     agents = []
@@ -416,7 +414,6 @@ def dicts_to_agents(uavs, agent_types):
             fuel=u.get('fuel', 0)
         ))
     return agents
-
 
 def dicts_to_tasks(tasks, task_types):
     type_map = {name: idx for idx, name in enumerate(task_types)}
